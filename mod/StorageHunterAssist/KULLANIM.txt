@@ -1,0 +1,39 @@
+StorageHunterAssist 0.2.0 — Satış / Depo / Zaman
+
+STEAM KURULUMU
+Oyunu kapat ve SaveGames klasörünü yedekle.
+Steam > Kütüphane > oyuna sağ tık > Yönet > Yerel dosyalara göz at.
+StorageHunter/Binaries/Win64 klasörüne gir.
+StorageHunter-Win64-Shipping.exe dosyasını gördüğün yere resmî UE4SS paketini çıkar.
+dwmapi.dll EXE yanında; ue4ss klasörü de aynı yerde olmalı.
+Bu ZIP'teki StorageHunterAssist klasörünü ue4ss/Mods içine kopyala.
+mods.txt dosyasına StorageHunterAssist : 1 ekle.
+mods.json da varsa aynı mod için mod_enabled: true kaydını listeye ekle.
+Diğer mod kayıtlarını koru. Ayrıntılar ZIP'teki KURULUM_STEAM.md içindedir.
+
+OYUNDA
+Kaydını yükle ve F8'e bas.
+Kaynak seç > İşlem seç > Hedef mağaza / bölge seç > eşyaları işaretle > işlem düğmesine bas.
+DEPOYA GÖNDER: yalnız kendi mağazalarından seçtiğinin depo stokuna yollar.
+SAT: seçilen rehin dükkânında oyunun normal hızlı satışını hemen yapar.
+Listeyi yenile / Tümünü seç / Seçimi temizle düğmeleri eşya listesine uygulanır.
+Yakın eşya mesafesi 15 m; kamyon mesafesi 50 m. Elde tuttuğun eşyayı önce bırak.
+
+OTOMATİK DEPO
+Başlangıçta kapalıdır. Depo hedefini seçtikten sonra kutuyu açabilirsin.
+Seçili kaynaktaki tüm uygun eşyaları gönderir; tek tek eşya seçimlerine bakmaz.
+Panel kapalıyken de sürer. Kutuyu kapatınca veya hedef / işlem / kaynak değişince durur.
+Otomatik satış yoktur.
+
+F6: zamanı seçili dakika kadar ilerlet.
+F7: 15 / 30 / 60 / 120 / 240 dakika arasında dolaş.
+F5: kısa yardım. F8: paneli aç / kapat.
+Ayar: Scripts/sh_assist_config.lua. Değişiklikten sonra oyunu yeniden başlat.
+
+Tek oyunculu / host içindir. Çok oyunculu istemci desteklenmez.
+Oyun build 22160137 ve UE4SS v3.0.1-1181-g83330635 ile doğrulandı.
+Daha sonraki oyun güncellemeleri ayrıca uyarlama gerektirebilir.
+ModMenu v1.4.0 arayüzü dahildir; ayrıca ModMenu veya başka oyun modu kurulmaz.
+
+Rehber ve destek: https://github.com/LeventOnlyAi/StorageHunterAssist
+Lisans: özgün mod MIT; ModMenu lisansı Scripts/ModMenu/LICENSE.txt içinde.
