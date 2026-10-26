@@ -1,0 +1,10 @@
+/dist/
+/.venv/
+__pycache__/
+*.pyc
+*.log
+*.sav
+*.dmp
+.DS_Store
+Thumbs.db
+
