@@ -1,4 +1,4 @@
-StorageHunterAssist 0.2.0 — Satış / Depo / Zaman
+StorageHunterAssist 0.3.0 — Satış / Depo / Zaman
 
 STEAM KURULUMU
 Oyunu kapat ve SaveGames klasörünü yedekle.
@@ -11,29 +11,33 @@ mods.txt dosyasına StorageHunterAssist : 1 ekle.
 mods.json da varsa aynı mod için mod_enabled: true kaydını listeye ekle.
 Diğer mod kayıtlarını koru. Ayrıntılar ZIP'teki KURULUM_STEAM.md içindedir.
 
-OYUNDA
-Kaydını yükle ve F8'e bas.
-Kaynak seç > İşlem seç > Hedef mağaza / bölge seç > eşyaları işaretle > işlem düğmesine bas.
-DEPOYA GÖNDER: yalnız kendi mağazalarından seçtiğinin depo stokuna yollar.
-SAT: seçilen rehin dükkânında oyunun normal hızlı satışını hemen yapar.
-Listeyi yenile / Tümünü seç / Seçimi temizle düğmeleri eşya listesine uygulanır.
-Yakın eşya mesafesi 15 m; kamyon mesafesi 50 m. Elde tuttuğun eşyayı önce bırak.
+OYUNDA — F8
+Aktarım: Kaynak > Kaliteye göre ayır: SAT / DEPO > kendi depo mağazan > ayrı satış bölgesi.
+Eşyalar: kalite başlığının kutusu o grubu seçer; altındaki kutular ürünleri tek tek seçer.
+Koleksiyonluklar kalite gruplarının altında koleksiyoncu adına göre ayrı görünür.
+Yıldız, bu hafta aranan ve teslim edilmemiş üründür; teslimi normal oyun ekranından yap.
+Aktarım'a dön > özet sayıları kontrol et > Seçilenleri KALİTEYE GÖRE AYIR.
 
-OTOMATİK DEPO
-Başlangıçta kapalıdır. Depo hedefini seçtikten sonra kutuyu açabilirsin.
-Seçili kaynaktaki tüm uygun eşyaları gönderir; tek tek eşya seçimlerine bakmaz.
-Panel kapalıyken de sürer. Kutuyu kapatınca veya hedef / işlem / kaynak değişince durur.
-Otomatik satış yoktur.
+KURALLAR
+Varsayılan: Yaygın SAT; Nadir/Epik/Efsanevi/Benzersiz DEPO.
+Kurallar sekmesinde işaretli kalite satılır, işaretsiz kalite depolanır.
+Koleksiyonluklar varsayılan BEKLET; ayrı kutuyla depoya yönlendirilebilir. Kalite kuralı onları satmaz.
+Kalitesi bilinmeyen/verisi okunamayan ürün ayırmada bekler.
+Satılacak ürünü önce oyunda doğrula. Doğrulanmamış satış bekler; mod otomatik doğrulama yapmaz.
+Elle hepsini SAT / DEPO modları kalite kuralını kullanmaz; SAT seçili koleksiyonlukları da satar.
 
-F6: zamanı seçili dakika kadar ilerlet.
-F7: 15 / 30 / 60 / 120 / 240 dakika arasında dolaş.
-F5: kısa yardım. F8: paneli aç / kapat.
-Ayar: Scripts/sh_assist_config.lua. Değişiklikten sonra oyunu yeniden başlat.
+OTOMATİK — BAŞLANGIÇTA KAPALI
+Ayırma modunda kurala göre SATIŞ DA YAPAR. Depo modunda tümünü depolar.
+Tek tek seçimlere bakmaz; kaynaktaki tüm uygun ürünleri işler; panel kapalıyken de sürer.
+Hedef/kaynak/işlem/kural değişikliği veya hata otomatiği kapatır. Oturum ayarları yeniden açılışta sıfırlanır.
+Depoda karma işlemin tamamına yer yoksa satış başlamaz. Kabul hatasında işlem durur.
+Canlı liste panel açıkken yaklaşık 2 saniyede bir yenilenir; yeni ürünler seçilmez.
+Yakın 15 m; kamyon 50 m. Eline aldığını bırak. Sahipsiz/başkasına ait/raftaki/depodaki/kutu içindeki alt ürünler dışarıda.
 
-Tek oyunculu / host içindir. Çok oyunculu istemci desteklenmez.
-Oyun build 22160137 ve UE4SS v3.0.1-1181-g83330635 ile doğrulandı.
-Daha sonraki oyun güncellemeleri ayrıca uyarlama gerektirebilir.
-ModMenu v1.4.0 arayüzü dahildir; ayrıca ModMenu veya başka oyun modu kurulmaz.
-
-Rehber ve destek: https://github.com/LeventOnlyAi/StorageHunterAssist
-Lisans: özgün mod MIT; ModMenu lisansı Scripts/ModMenu/LICENSE.txt içinde.
+F6: seçili dakika ileri al. F7: 15/30/60/120/240 dakika. F5: yardım.
+Zaman gün sonunda durur; yeni gün için yatakta uyu.
+Ayar: Scripts/sh_assist_config.lua. Değişiklikten sonra yeniden başlat.
+Tek oyunculu/host; build 22160137 ve UE4SS v3.0.1-1181-g83330635 üzerinde test edildi.
+ModMenu dahildir. Ayrıntılı Steam rehberi ZIP'teki KURULUM_STEAM.md içinde.
+Rehber: https://github.com/LeventOnlyAi/StorageHunterAssist
+Lisans: MIT; ModMenu lisansı Scripts/ModMenu/LICENSE.txt içinde.
