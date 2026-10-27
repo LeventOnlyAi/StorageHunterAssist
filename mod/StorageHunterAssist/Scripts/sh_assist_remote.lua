@@ -2,6 +2,7 @@
 local M = {}
 local H = require('UEHelpers')
 local Core = require('sh_assist_core')
+local Items = require('sh_assist_items')
 local processed = {}
 local busy = false
 local function valid(o) return o ~= nil and o:IsValid() end
@@ -63,37 +64,68 @@ local function eligible(o, ids)
         warehouse=o.IsAddedToWarehouse,inside=o.IsInsideContainer,
         held=o.IsInPickingUpMode,processed=processed[name(o)]},ids)
 end
+local function observeRecycled(ids)
+    -- The game pools tradable actors. A successful transaction's actor can later
+    -- represent another acquired item with the SAME full name. Clear only a
+    -- confirmed latch when native ownership/storage state proves it has left
+    -- the previous loose-goods lifecycle. Ambiguous failures remain latched.
+    for key,mark in pairs(processed) do
+        if type(mark)=='table' then
+            local o=mark.actor
+            local ok,released=pcall(function()
+                return not valid(o) or not ids[text(o.OwnerPlayerID)] or o.IsAddedToWarehouse==true or o.IsInPawnShop==true
+            end)
+            if ok and released then processed[key]=nil end
+        end
+    end
+end
 function M.scan(c, source)
     local p, err = M.ready()
     if not p then return {}, err end
     local ids = aliases(p, M.catalog())
+    observeRecycled(ids)
     local origin = p:K2_GetActorLocation()
     local rows, seen = {}, {}
+    local collectors=Items.collectors()
+    local rejected,errors=0,0
     local function add(o, where)
-        if not eligible(o,ids) then return end
+        if not eligible(o,ids) then rejected=rejected+1; return end
         local key=name(o)
         if seen[key] then return end
         seen[key]=true
-        local out={}; o:GetItemName(out)
-        rows[#rows+1]={key=key,actor=o,label=text(out.ItemName),source=where}
+        local out={}; pcall(function() o:GetItemName(out) end)
+        local row=Items.describe(o,collectors)
+        row.key,row.actor,row.label,row.source=key,o,text(out.ItemName),where
+        if row.label=='' then row.label=text(o.ID) end
+        rows[#rows+1]=row
     end
     if source ~= 'near' then
         for _, trunk in ipairs(FindAllOf('BP_Vehicle_Trunk_C') or {}) do
             if valid(trunk) and valid(trunk.TradableItemsRegisterBox)
                 and Core.distanceSquared(origin,trunk.TradableItemsRegisterBox:K2_GetComponentLocation()) <= c.TruckRangeCm^2 then
-                trunk.PackedTradableItems:ForEach(function(_,e) add(e:get(),'Kamyon') end)
+                trunk.PackedTradableItems:ForEach(function(_,e)
+                    local ok=pcall(function() add(e:get(),'Kamyon') end)
+                    if not ok then errors=errors+1 end
+                end)
             end
         end
     end
     if source ~= 'truck' then
         for _, o in ipairs(FindAllOf('BP_TradableItemBase_C') or {}) do
-            if eligible(o,ids) and Core.distanceSquared(origin,o:K2_GetActorLocation()) <= c.NearRangeCm^2 then
-                add(o,'Yakında')
-            end
+            local ok=pcall(function()
+                if valid(o) and Core.distanceSquared(origin,o:K2_GetActorLocation()) <= c.NearRangeCm^2 then add(o,'Yakında') end
+            end)
+            if not ok then errors=errors+1 end
         end
     end
     table.sort(rows,function(a,b) if a.source==b.source then return a.label<b.label end return a.source<b.source end)
-    return rows
+    local reason
+    if #rows==0 then
+        reason='Uygun eşya yok. Kaynağı ve mesafeyi kontrol et.'
+        if rejected>0 then reason=reason..' Yakındaki '..rejected..' eşya sahiplik / elde / kutu / raf / depo nedeniyle dışarıda.' end
+        if errors>0 then reason=reason..' '..errors..' geçersiz eşya atlandı; tekrar yenile.' end
+    end
+    return rows,reason
 end
 function M.isBusy() return busy end
 -- Re-scan immediately before committing: stale UI selections cannot sell moved goods.
@@ -102,7 +134,7 @@ function M.resolve(c, source, keys)
     for _,r in ipairs(M.scan(c,source)) do if keys[r.key] then result[#result+1]=r end end
     return result
 end
-function M.deposit(c, source, targetKey, keys, done)
+function M.deposit(c, source, targetKey, keys, done, guard)
     if busy then done('Önceki işlem devam ediyor.',0); return end
     local p,err=M.ready(); if not p then done(err,0); return end
     local target
@@ -111,6 +143,7 @@ function M.deposit(c, source, targetKey, keys, done)
         done('Sahip olduğun açık bir mağaza deposunu seç.',0); return
     end
     local rows=M.resolve(c,source,keys)
+    if guard then local filtered={}; for _,r in ipairs(rows) do if guard(r) then filtered[#filtered+1]=r end end; rows=filtered end
     if #rows==0 then done('Seçili uygun eşya yok. Listeyi yenile.',0); return end
     busy=true
     local inv=target.warehouse.BP_TradableInventory_Comp
@@ -124,6 +157,7 @@ function M.deposit(c, source, targetKey, keys, done)
             processed[r.key]=true
             target.warehouse:OnTradableItemOverlappedDropZone(r.actor,true,out)
             if out.WasItemAdded == true then
+                processed[r.key]={actor=r.actor}
                 count=count+1
                 log(string.format('DEPOSIT target=%s item=%s before=%d after=%d',target.key,r.key,before,inv.CurrentAmount))
             else
@@ -134,26 +168,30 @@ function M.deposit(c, source, targetKey, keys, done)
         end
     end)
     busy=false
-    if not ok then log('DEPOSIT ERROR '..tostring(failure)); done('Depo işlemi durdu; günlük dosyasını kontrol et.',count); return end
-    done(string.format('%d eşya depoya gönderildi: %s.%s',count,target.label,full and ' Depo dolu veya eşya kabul edilmedi.' or ''),count)
+    if not ok then log('DEPOSIT ERROR '..tostring(failure)); done('Depo işlemi durdu; günlük dosyasını kontrol et.',count,true); return end
+    done(string.format('%d eşya depoya gönderildi: %s.%s',count,target.label,full and ' Depo dolu veya eşya kabul edilmedi.' or ''),count,full)
 end
-function M.sell(c, source, targetKey, keys, done)
+function M.sell(c, source, targetKey, keys, done, guard)
     if busy then done('Önceki işlem devam ediyor.',0); return end
     local p,err=M.ready(); if not p then done(err,0); return end
     local target
     for _,d in ipairs(M.catalog()) do if d.key==targetKey then target=d end end
     if not target then done('Bir satış noktası seç.',0); return end
     local rows=M.resolve(c,source,keys)
+    if guard then local filtered={}; for _,r in ipairs(rows) do if guard(r) then filtered[#filtered+1]=r end end; rows=filtered end
     if #rows==0 then done('Seçili uygun eşya yok. Listeyi yenile.',0); return end
+    for _,r in ipairs(rows) do
+        if not r.saleReady then done('Satış için önce seçili ürünleri oyunda doğrula. Sıfır bedelli satış önlendi.',0,true); return end
+    end
     busy=true
     local widget, completed= nil,0
-    local function cleanup(message)
+    local function cleanup(message,halt)
         if valid(widget) then pcall(function() widget:RemoveFromParent() end) end
         busy=false
-        done(message,completed)
+        done(message,completed,halt)
     end
     local function fail(e)
-        log('SALE ERROR '..tostring(e)); cleanup('Satış durduruldu. Tekrar denemeden önce listeyi yenile.')
+        log('SALE ERROR '..tostring(e)); cleanup('Satış durduruldu. Tekrar denemeden önce listeyi yenile.',true)
     end
     local ok,failure=pcall(function()
         local cls=StaticFindObject('/Game/SH/Systems/PawnShopSystem/UI/WBP_PawnShop_Sell.WBP_PawnShop_Sell_C')
@@ -170,6 +208,9 @@ function M.sell(c, source, targetKey, keys, done)
     later(350,function()
         local ok2,e=pcall(function()
             if not valid(widget) or not valid(p) then error('Sale context expired') end
+            local current={}
+            for _,r in ipairs(M.resolve(c,source,keys)) do if r.saleReady and (not guard or guard(r)) then current[r.key]=true end end
+            for _,r in ipairs(rows) do if not current[r.key] then error('Sale selection moved or changed') end end
             local presets={}
             widget.WBP_PawnShop_WarehouseItems.PresetsArray:ForEach(function(_,e) presets[#presets+1]=e:get() end)
             if #presets~=#rows then error('Native sale rows did not match selection') end
@@ -178,9 +219,11 @@ function M.sell(c, source, targetKey, keys, done)
             for _,r in ipairs(presets) do
                 local actor=r['Tradable Item']
                 if not valid(actor) or not byKey[name(actor)] or processed[name(actor)] then error('Sale item changed') end
-                processed[name(actor)]=true
+                local actorKey=name(actor)
+                processed[actorKey]=true
                 -- Native quick-sale event includes the normal regional accounting and removal.
                 widget:OnClicked_PawnShopWarehouseItems_QuickSell_Event(actor,r.Index,r.ItemId,r.AssignedIndividualData,r)
+                processed[actorKey]={actor=actor}
                 completed=completed+1
             end
             local after=p.PlayerState:GetPlayerCredits()
@@ -189,5 +232,41 @@ function M.sell(c, source, targetKey, keys, done)
         end)
         if not ok2 then fail(e) end
     end)
+end
+-- Deposit first; a full/rejected warehouse must stop the batch before any sale.
+function M.sort(c, source, saleKey, depotKey, keys, rules, done)
+    if busy then done('Önceki işlem devam ediyor.',0); return end
+    local snapshot={sell={},collectorDepot=rules.collectorDepot==true}
+    for k,v in pairs(rules.sell) do snapshot.sell[k]=v==true end
+    local parts=Items.partition(M.resolve(c,source,keys),nil,snapshot)
+    local function size(t) local n=0; for _ in pairs(t) do n=n+1 end; return n end
+    local ns,nd,nh=size(parts.sell),size(parts.depot),size(parts.hold)
+    if ns+nd==0 then done('İşlenecek eşya yok. Koleksiyonluk, bilinmeyen ve satış için doğrulanmamış ürünler bekler.',0); return end
+    local saleTarget,depotTarget
+    for _,d in ipairs(M.catalog()) do
+        if d.key==saleKey then saleTarget=d end
+        if d.key==depotKey and d.owned then depotTarget=d end
+    end
+    if ns>0 and not saleTarget then done('Önce satış bölgesini seç.',0); return end
+    if nd>0 and (not depotTarget or not valid(depotTarget.warehouse) or not depotTarget.warehouse.bIsUnlocked) then
+        done('Önce kendi açık mağaza deponu seç.',0); return
+    end
+    if nd>0 then
+        local inv=depotTarget.warehouse.BP_TradableInventory_Comp
+        if inv.Capacity-inv.CurrentAmount<nd then done('Depoda bütün seçili eşyalara yer yok. İşlem başlatılmadı.',0); return end
+    end
+    local deposited=0
+    local function sellRest()
+        if ns==0 then done(string.format('%d depoya gönderildi; %d bekletildi.',deposited,nh),deposited); return end
+        M.sell(c,source,saleKey,parts.sell,function(message,n,halt)
+            done(string.format('%d depoya; %d satıldı; %d bekletildi. %s',deposited,n,nh,message),deposited+n,halt or n~=ns)
+        end,function(r) return Items.action(r,snapshot)=='sell' end)
+    end
+    if nd==0 then sellRest(); return end
+    M.deposit(c,source,depotKey,parts.depot,function(message,n)
+        deposited=n
+        if n~=nd then done(message..' Ayırma durdu; satış başlatılmadı.',n,true); return end
+        sellRest()
+    end,function(r) return Items.action(r,snapshot)=='depot' end)
 end
 return M

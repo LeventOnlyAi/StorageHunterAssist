@@ -1,5 +1,5 @@
 -- StorageHunterAssist: native remote sale / warehouse panel and configurable time skip.
-local VERSION = '0.2.0'
+local VERSION = '0.3.0'
 local H = require('UEHelpers')
 local Core = require('sh_assist_core')
 local C = Core.validate(require('sh_assist_config'))
