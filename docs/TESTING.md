@@ -1,6 +1,27 @@
 # Doğrulama kapsamı / Verification scope
 
-## Oyun içi testler
+## 0.3.0 — 27 Ekim 2026
+
+Windows, oyun build **22160137**, UE4SS **v3.0.1-1181-g83330635**. Güncel F8 arayüzü temiz başlangıçta açıldı; kalite grupları, ürün sayıları, tek ürün kutuları, ayrı satış/depo hedefleri ve Kurallar sekmesi gözlendi.
+
+| Kontrol | Gözlenen sonuç |
+| --- | --- |
+| Kaliteye göre karma işlem | Nadir kanepe Çayüzümü deposuna geçti; işlem anında stok 10 → 11. Seçili yaygın ürün native satış yoluyla çıkarıldı. |
+| Doğrulanmamış satış sorunu | Geliştirmede doğrulanmamış yaygın ürünün native satışta sıfır nakit değişimiyle çıkabildiği görüldü. Yayına eklenen kontrol aynı durumda 0 işlemle satış isteğini reddetti. |
+| Doğrulama sonrası kalite satışı | Oyunun doğrulama işlemi sonrasında yaygın ürün Naple hedefine satıldı; yeni koruma koduyla nakit +42 gözlendi. Ayrı önceki denemede +89 gözlendi. |
+| Koleksiyon bilgisi | Hançer Arkeolog grubunda; Kano Hazırlıkçılar grubunda, güncel haftalık istek yıldızıyla gösterildi. Grup kutusu altındaki ürünü seçti. |
+| Son temiz başlangıçta otomatik ayırma | Nadir koltuk Çayüzümü deposuna girdi: 10 → 11. Koleksiyonluk Kano `hold` durumunda listede kaldı, nakit değişmedi. |
+| Koleksiyonluğu isteğe bağlı depolama | Kurallar kutusu açıldıktan sonra seçili Kano depoya geçti: 11 → 12. |
+| Canlı liste | Panel açık ve otomatik işlem kapalıyken sonradan getirilen ürünler listeye eklendi. Mevcut seçimler korunur; yeni ürünler seçilmez. |
+| Havuzlanan aktör | Daha önce işlenen Yatak ile sonradan edinilen ürünün aynı tam aktör adını kullandığı gözlendi. Bu durum için eski işlem kaydının temizlenmesi yerel regresyon testleriyle, kamyon-only durumu dahil kontrol edildi. |
+
+Bu rakamlar vanilla satış fiyatı iddiası değildir; test ortamında başka satış modları vardır. Doğrulama sırasında geçici test komutları ve yedeklenmiş kayıt kullanıldı. İlk testte geçici fixture sıfırlama komutu erişim ihlaliyle oyunu kapattı; o komut yayın koduna dahil değildir. Son temiz başlangıç ve otomatik/depo testleri tamamlandı. Test oturumlarının kayıt değişiklikleri geri alındı; kurulan yayın Lua dosyaları kaynakla hash karşılaştırıldı.
+
+Yerel Lua testleri ayrıca bütün nadirlik rotalarını, bilinmeyen/doğrulanmamış ürün bekletmesini, koleksiyoncu adını ve haftalık teslim durumunu, depo kapasite kontrolünü, kısmi depo reddinde satışı durdurmayı, native satışın gecikmesi sırasında sahiplik/mesafe/doğrulama/kalite değişimini kontrol eder. Bir ürünün adı okunamasa da kalan listenin görünmesi için eski 0.2.0 koduyla başarısız, yeni kodla başarılı regresyon testi çalıştırıldı. 7200 zaman sınırı kontrolü korunur. Mock arayüz testi, otomatik işlem kapalıyken yeni satır eklenmesini, seçim korumayı, değişmeyen listede arayüzü yeniden kurmamayı ve kural değişikliğinde otomatiği durdurmayı doğrular.
+
+Her özel eşya/kutu türü, çok oyunculu istemci veya yeni Steam build'i ayrıca test edilmedi. Görünmeme sorununda yeniden üretilen nedenler giderildi; bütün olası nedenlerin giderildiği iddia edilmez. Koleksiyoncuya otomatik teslim bu sürümün özelliği değildir.
+
+## 0.2.0 — önceki sürümün oyun içi testleri
 
 Modun 0.2.0 çalışma kodu oyun build **22160137**, Windows ve **UE4SS v3.0.1-1181-g83330635** ile doğrulandı. Bu yayında çalışan Lua dosyaları değiştirilmeden paketlenmiştir. Kullanıcı da daha sonraki oynanışında modun çalıştığını bildirdi.
 
@@ -35,4 +56,4 @@ Bu kontroller oyun içi çalışmanın yerine geçmez. Geliştiriciler Python 3 
 
 ## Yayın paketi
 
-Yayın kontrolü, altı Lua dosyasının çalışan kopyayla SHA-256 eşleşmesini, paketteki üçüncü taraf lisansını ve ZIP bütünlüğünü denetler. Kullanıcı kayıtları, yerel kurulum makbuzları, hata dökümleri, test komut eklentileri ve başka modlar yayımlanmaz.
+Yayın kontrolü, yedi Lua dosyasının kurulan kopyayla SHA-256 eşleşmesini, paketteki üçüncü taraf lisansını ve ZIP bütünlüğünü denetler. Kullanıcı kayıtları, yerel kurulum makbuzları, hata dökümleri, test komut eklentileri ve başka modlar yayımlanmaz.
