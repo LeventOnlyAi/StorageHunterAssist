@@ -5,12 +5,12 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 MOD = ROOT / 'mod' / 'StorageHunterAssist'
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 ALLOW = {
     'KULLANIM.txt', 'LICENSE',
     'Scripts/main.lua', 'Scripts/sh_assist_config.lua',
     'Scripts/sh_assist_core.lua', 'Scripts/sh_assist_panel.lua',
-    'Scripts/sh_assist_remote.lua', 'Scripts/ModMenu/ModMenu.lua',
+    'Scripts/sh_assist_remote.lua', 'Scripts/sh_assist_items.lua', 'Scripts/ModMenu/ModMenu.lua',
     'Scripts/ModMenu/LICENSE.txt',
 }
 
