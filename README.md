@@ -2,9 +2,9 @@
 
 **Storage Hunter Simulator için Türkçe satış, mağaza deposu ve zaman paneli.**
 
-Kamyonundaki veya yakınındaki sana ait eşyaları seç; istediğin bölgedeki rehin dükkânında uzaktan sat ya da sahip olduğun mağazanın **deposuna** gönder. İstersen seçili mağazaya otomatik depo aktarımını aç. Zamanı da seçtiğin dakika kadar ilerletebilirsin.
+Kamyonundaki veya yakınındaki sana ait eşyaları seç; istediğin bölgedeki rehin dükkânında uzaktan sat ya da sahip olduğun mağazanın **deposuna** gönder. Yaygınları satıp diğer kaliteleri seçtiğin depoya ayırabilir, koleksiyonlukları ayrı seçebilir ve istersen otomatik işlemi açabilirsin. Zamanı da seçtiğin dakika kadar ilerletebilirsin.
 
-[**Modu indir — v0.2.0**](https://github.com/LeventOnlyAi/StorageHunterAssist/releases/download/v0.2.0/StorageHunterAssist_0.2.0.zip) · [Sürümler](https://github.com/LeventOnlyAi/StorageHunterAssist/releases) · [English guide](docs/README.en.md)
+[**Modu indir — v0.3.0**](https://github.com/LeventOnlyAi/StorageHunterAssist/releases/download/v0.3.0/StorageHunterAssist_0.3.0.zip) · [Sürümler](https://github.com/LeventOnlyAi/StorageHunterAssist/releases) · [English guide](docs/README.en.md)
 
 ![Oyundaki F8 satış ve depo paneli](docs/images/panel.png)
 
@@ -13,7 +13,11 @@ Kamyonundaki veya yakınındaki sana ait eşyaları seç; istediğin bölgedeki 
 - **Eşya kaynağı seçimi:** Kamyon + yakınındaki eşyalar, yalnız kamyon veya yalnız yakın.
 - **Hedef seçerek doğrudan satış:** Çayüzümü, Doğu, Batı, Zwiebel Çiftliği ve Naple rehin dükkânları.
 - **Kendi mağazana depo aktarımı:** Hedef olarak yalnız sahip olduğun açık mağazalar listelenir. Eşyalar depo stokuna girer; raflara dizilmez.
-- **İsteğe bağlı otomatik depo:** Seçtiğin kaynaktaki uygun eşyaları yaklaşık iki saniyede bir seçili mağazana gönderir.
+- **Kaliteye göre ayırma:** Yaygınlar varsayılan olarak satılır; nadir, epik, efsanevi ve benzersiz ürünler seçtiğin depoya gönderilir. Hangi kalitelerin satılacağını kutucuklardan değiştir.
+- **Kalite grupları:** Her kalitenin yanında ürün sayısı ve toplu seçim kutusu; altında tek tek ürün kutuları bulunur.
+- **Koleksiyonluklar:** Kalite gruplarının altında koleksiyoncu adına göre ayrı listelenir. Bu hafta aranan, teslim edilmemiş ürünlerde yıldız bulunur. Kalite kuralları bu ürünleri satmaz.
+- **Canlı liste:** Panel açıkken yaklaşık iki saniyede bir yenilenir; tek bir bozuk ürün diğerlerini gizlemez.
+- **İsteğe bağlı otomatik işlem:** Ayırma modunda kurala göre satış / depo; depo modunda tüm uygun ürünleri depolama. Başlangıçta kapalıdır.
 - **Ayarlanabilir zaman atlama:** 15, 30, 60, 120 veya 240 dakika; ayar dosyasından değiştirilebilir.
 - **Türkçe panel:** `F8` ile açılır ve kapanır.
 
@@ -26,7 +30,7 @@ Satış oyunun kendi hızlı satış işlemini kullanır. Mağaza satın alımı
 | Oyun | Windows üzerinde Storage Hunter Simulator. Aşağıdaki rehber Steam kurulumu içindir. |
 | Oynanış | Tek oyunculu / host. Çok oyunculu istemci desteklenmez. |
 | UE4SS | Oyun içinde doğrulanan sürüm: **v3.0.1-1181-g83330635**. |
-| Mod paketi | Bu deponun Releases bölümündeki **StorageHunterAssist_0.2.0.zip**. |
+| Mod paketi | Bu deponun Releases bölümündeki **StorageHunterAssist_0.3.0.zip**. |
 
 Oyun içi doğrulama **build 22160137** ile yapıldı. Steam'in her yeni oyun güncellemesi için ayrıca uyumluluk garantisi verilmez. Kurulum yolu Steam'e göre anlatılır; bu, Steam'in güncel sürümünde ayrıca test yapıldığı anlamına gelmez. [Doğrulama kapsamı](docs/TESTING.md).
 
@@ -89,7 +93,7 @@ Resmî kaynaklar: [UE4SS kurulum rehberi](https://docs.ue4ss.com/dev/installatio
 
 ### 4. StorageHunterAssist klasörünü yerleştir
 
-1. Sayfanın başındaki **Modu indir** bağlantısından `StorageHunterAssist_0.2.0.zip` dosyasını indir.
+1. Sayfanın başındaki **Modu indir** bağlantısından `StorageHunterAssist_0.3.0.zip` dosyasını indir.
 2. ZIP'in içindeki **`StorageHunterAssist` klasörünü** şu konuma kopyala:
 
    ```text
@@ -131,50 +135,60 @@ Bu, **JSON listesinin içine eklenecek bir kayıt** örneğidir; tüm dosyayı b
 
 Oyunu **Steam'deki Oyna düğmesiyle** normal şekilde başlat. Kayıtlı oyununu yükle; ana menüde değil, karakterinle dünyaya girdikten sonra **F8**'e bas.
 
-Sağ tarafta **Storage Hunter | Satış ve Depo** paneli açılır. Steam başlatma seçeneklerine bu mod için özel bir komut yazman gerekmez.
+Sağ tarafta **Storage Hunter | Kalite ve Koleksiyon** paneli açılır. Steam başlatma seçeneklerine bu mod için özel bir komut yazman gerekmez.
 
 ## Panel nasıl kullanılır?
 
-### Mağaza deposuna gönderme
+### Yaygınları sat, diğer kaliteleri depoya gönder
 
-1. **Kaynak:** `Kamyon + yakınımdaki eşyalar` seç. İstersen yalnız kamyonu veya yalnız yakın eşyaları seçebilirsin.
-2. **İşlem:** `Mağazamın deposuna gönder` seç.
-3. **Hedef mağaza / bölge:** Eşyaların gideceği kendi mağazanı seç.
-4. **Listeyi yenile** düğmesine bas.
-5. Alttaki eşya kutularını işaretle veya **Tümünü seç** düğmesine bas.
-6. **Seçilenleri DEPOYA GÖNDER** düğmesine bas.
+1. **F8 → Aktarım** sekmesinde kaynağı seç: kamyon + yakın, yalnız kamyon veya yalnız yakın.
+2. **İşlem → Kaliteye göre ayır: SAT / DEPO** seç. Bu varsayılan moddur.
+3. **Depo mağazam** alanından ürünlerin gideceği kendi açık mağazanı seç.
+4. **Kaliteye göre ayırma: satış bölgesi** alanından yaygınların satılacağı rehin dükkânını seç. Depo ve satış hedefleri birbirinden bağımsızdır.
+5. **Eşyalar** sekmesine geç. Yaygın / nadir / epik gibi başlığın kutusu o gruptakileri topluca seçer. Altındaki kutulardan ürünleri ayrı da seçebilirsin. **Tümünü seç** koleksiyonluklar dahil bütün listelenenleri işaretler.
+6. **Aktarım** sekmesine dön. `1 sat / 2 depo / 1 beklet` gibi özet, seçilen ürünlere kalite kuralının ne yapacağını gösterir.
+7. **Seçilenleri KALİTEYE GÖRE AYIR** düğmesine bas. İşlem hemen başlar.
 
-Eşya kamyondan veya bulunduğu yerden alınır ve hedef mağazanın depo stokuna girer. Mağazanın yanında olman gerekmez. Örneğin `[22/40]`, depoda 40 kapasitenin 22'sinin kullanıldığını gösterir. Depo doluysa kapasite aşılmaz.
+**Kurallar** sekmesinde işaretli kalite **SATILIR**; işaretsiz kalite seçtiğin **DEPOYA** gider. Varsayılan olarak yalnız **Yaygın ürünleri SAT** işaretlidir. Eşya kondisyonu ile nadirlik farklıdır; kutular nadirlik değerini kullanır. Oyunda kalitesi henüz bilinmeyen veya koleksiyon verisi okunamayan ürün ayırmada **bekletilir**. Satılacak ürün önce oyunda doğrulanmış olmalıdır: doğrulanmamış ürün `Doğrulanmadı: satış bekler` etiketiyle bekler; mod otomatik doğrulama yapmaz. Bu kontrol, native hızlı satışta doğrulanmamış ürünü sıfır bedelle çıkarma durumunu önler.
 
-### İstediğin bölgede doğrudan satış
+Depo ayağı önce yapılır. Tüm seçili depo ürünlerine yer yoksa işlem başlamaz ve satış da yapılmaz. Depo eşya reddederse işlem durur; daha önce kabul edilmiş ürünler depoda kalır, satış ayağı başlatılmaz. Yerel oyun hatası veya hedef değişimi halinde tam geri alma garantisi yoktur; sonucu kontrol et.
 
-1. **İşlem:** `Satış noktasında doğrudan sat` seç.
-2. **Hedef mağaza / bölge:** Satışın yapılacağı rehin dükkânını seç.
-3. Eşyaları işaretle veya **Tümünü seç** düğmesine bas.
-4. **Seçilenleri SAT** düğmesine bas.
+### Koleksiyonluk ürünleri seçme
 
-**SAT düğmesi işlemi hemen yapar.** Satıcıya araçla gitmen gerekmez. Oyunun normal hızlı satış hesabı ve nakit / banka dağılımı kullanılır. Panelde gösterilen nakit değişimi, banka payını da içeren toplam satış tutarı olarak yorumlanmamalıdır.
+**Eşyalar** sekmesinde kalite gruplarının altında **KOLEKSİYONLUKLAR** bulunur. Örneğin **Koleksiyonluk — Arkeolog (2)** kutusu o koleksiyoncunun iki ürününü seçer. Her ürünün kalitesi ve bulunduğu kaynak da satırında yazar.
 
-Bu sürümde hedefler beş rehin dükkânıdır: **Çayüzümü, Doğu, Batı, Zwiebel Çiftliği ve Naple**. Koleksiyoncular ve uzmanlar hedef değildir. Bu panel alıcıyla pazarlık ekranını açmaz; doğrudan hızlı satış yapar.
+**★ BU HAFTA ARANIYOR**, oyunun o haftaki listesinde bulunan ve henüz teslim edilmemiş ürün demektir. Yıldız olmayan koleksiyonluklar da ayrı listede korunur. Bu bilgi, koleksiyoncunun ürünü şu anda kesin kabul edeceği veya ürün doğrulamasının tamamlandığı anlamına gelmez.
 
-### Otomatik depo
+Kaliteyle ayırmada koleksiyonluklar varsayılan olarak **bekletilir**. İstersen **Kurallar → Koleksiyonlukları bekletmek yerine seçtiğim DEPOYA gönder** kutusunu aç. Bu kutu onları satmaz. Koleksiyoncuya teslimi oyunun normal ekranından yap; koleksiyoncular uzaktan satış hedefi değildir.
 
-Önce depo işlemini, kaynağı ve hedef mağazanı seç; ardından **Otomatik depo** kutusunu aç.
+### Seçilenlerin hepsini depoya gönderme veya satma
 
-- Varsayılan olarak **kapalıdır**; oyun yeniden açılınca kapalı başlar.
-- Açıkken seçili kaynaktaki **tüm uygun eşyalar** yaklaşık iki saniyede bir hedef depoya gönderilir.
-- Eşya seçim kutularına bakmaz. Sadece işaretlediğin eşyalar gitsin istiyorsan otomatiği kapalı tutup elle gönderme düğmesini kullan.
-- Paneli `F8` ile kapattığında otomatik depo çalışmaya devam eder.
-- Kaynağı, işlemi veya hedefi değiştirirsen otomatik kapanır. Dolu depo / kabul edilmeyen eşya durumunda da durur.
-- Kapatmak için paneli açıp aynı kutuyu kapat.
+- Depolama için **İşlem → Hepsini mağazamın deposuna gönder**, ardından **Depo mağazam** alanından kendi hedef mağazanı seç. **Eşyalar** sekmesinde seçip **Aktarım → Seçilenleri DEPOYA GÖNDER** düğmesine bas.
+- Satış için **İşlem → Hepsini satış noktasında doğrudan sat** seç. Aynı hedef alanından satış bölgesini seç; ürünleri işaretleyip **Seçilenleri SAT** düğmesine bas.
 
-**Otomatik satış yapılmaz.** Satış için eşya seçip SAT düğmesine basman gerekir.
+Bu iki mod kalite kurallarını kullanmaz. **SAT modu, elle seçtiğin koleksiyonlukları da hemen satar.** Depo aktarımı raflara yerleştirmez; normal depo stokunu ve kapasitesini kullanır. `[22/40]`, 40 kapasitenin 22'sinin dolu olduğunu gösterir.
+
+Satış oyunun hızlı satışını kullanır. Nakit / banka payı normal oyun hesabına göre dağıtılır. Gösterilen nakit değişimi toplam satış tutarı değildir. Beş hedef: **Çayüzümü, Doğu, Batı, Zwiebel Çiftliği, Naple**. Koleksiyoncular ve uzmanlar satış hedefi değildir; pazarlık ekranı açılmaz.
+
+### Otomatik işlem
+
+Otomatik **kapalı başlar**. Kaynağı, hedefleri ve kuralları ayarladıktan sonra **Aktarım → Otomatik: kaynakta bulunan tüm uygun ürünlere uygula** kutusunu aç.
+
+- **Ayırma modunda otomatik SATIŞ DA YAPAR.** İşaretli kaliteler satılır, diğerleri depoya gider. Koleksiyonluklar seçtiğin koruma / depo kuralını izler; bilinmeyenler bekler.
+- **Depo modunda** tüm uygun ürünleri hedef depoya gönderir. Doğrudan SAT modunda otomatik açılamaz.
+- Tek tek ürün seçim kutularına bakmaz; seçili kaynaktaki **tüm uygun ürünlere** yaklaşık iki saniyede bir uygulanır.
+- Panel kapalıyken de sürer. Kaynak / işlem / hedef / kalite kuralı değişince kapanır. Dolu veya reddeden depo, başarısız işlem ve oyun yeniden açılışı da otomatiği kapatır.
+- Kapatmak için aynı kutuyu kapat. Kurallar ve hedefler bu sürümde yalnız o oyun oturumu boyunca tutulur.
 
 ### Hangi eşyalar görünür?
 
-Yakındaki yerdeki eşyalar için **15 metre**, kamyon kasasının oyuncuya mesafesi için **50 metre** sınırı kullanılır. Yalnız sana ait uygun ticari eşyalar listelenir.
+Yakındaki yerdeki eşyalarda **15 metre**, kamyon kasasında **50 metre** mesafe kullanılır. Yalnız sana ait uygun ticari eşyalar görünür. Aynı ürün kamyon ve yakında iki kez sayılmaz.
 
-Eline aldığın eşyayı önce yere bırak. Henüz satın almadığın açık artırma malları, başkasının eşyası, raftaki ürünler, depoya zaten giren eşyalar ve kutuların içindeki alt eşyalar ayrı birer satır olarak listelenmez. Aynı eşya hem kamyon hem yakın listesinde iki kez sayılmaz. Eşyayı taşıdıktan sonra **Listeyi yenile** düğmesine bas.
+Eline aldığını önce bırak. Satın alınmamış / başkasına ait ürünler, raf ürünleri, zaten depoda olanlar ve kutu içindeki alt ürünler ayrı işlenmez. Panel açıkken liste kendini yeniler; yenileme mevcut ürün seçimlerini korur ve yeni ürünü kendiliğinden seçmez. İstersen **Listeyi yenile** düğmesini de kullan.
+
+Oyun bir satış / depo işleminden sonra aynı aktörü yeniden kullanırsa, onaylanmış eski işlem kaydı doğal sahiplik / depo değişiminde temizlenir; yeni ürün kalıcı olarak gizlenmez. Sonucu belirsiz motor hataları otomatik tekrar denenmez.
+
+Tek bir ürünün adı okunamazsa kimliği gösterilir; geçersiz ürün diğerlerinin taranmasını engellemez. Boş listede sahiplik / elde / kutu / raf / depo nedeniyle dışarıda kalan ürünler için açıklama gösterilebilir. Bu sürüm bütün görünmeme nedenlerinin giderildiği iddiasında değildir; hareket veya bırakma sonrası birkaç saniye bekleyip doğru kaynağı kontrol et.
 
 ## Zaman tuşları
 
@@ -213,7 +227,7 @@ AutoDepositPollMs = 2000,        -- kontrol aralığı; milisaniye
 | Hiç eşya görünmüyor | Kamyona yaklaş; elindeki eşyayı bırak; doğru kaynağı seç; Listeyi yenile'ye bas. Eşyanın sana ait olması gerekir. |
 | Depo hedefi yok | Satın aldığın, açık bir mağaza deposu bulunmalı. Satış işlemi ile depo işleminin hedef listesi farklıdır. |
 | Depoya gitmiyor | Hedef kapasitesini ve durum mesajını kontrol et. Eşya listelendikten sonra yer değiştirdiyse tekrar tara. |
-| Otomatik depo kapalı | Kaynak / işlem / hedef değişikliği, oyun yeniden açılışı veya kabul edilmeyen işlem otomatiği kapatabilir. |
+| Otomatik kapalı | Kaynak / işlem / hedef / kural değişikliği, oyun yeniden açılışı veya kabul edilmeyen işlem otomatiği kapatabilir. Doğrudan SAT modunda açılamaz. |
 | Oyun güncellemesinden sonra çalışmıyor | Önce modu kapat; oyun ve UE4SS sürümünü not ederek issue aç. Başka oyun build'leri uyarlama gerektirebilir. |
 
 UE4SS günlüğü şu konumdadır:
@@ -222,7 +236,7 @@ UE4SS günlüğü şu konumdadır:
 Win64\ue4ss\UE4SS.log
 ```
 
-Yükleme satırında `[StorageHunterAssist] v0.2.0 loaded` görülmesi modun yüklendiğini gösterir. Günlük hiç oluşmuyorsa önce UE4SS kurulumunu kontrol et. Yardım isterken oyun build'ini, UE4SS sürümünü, hangi düğmeye bastığını ve ilgili hata satırlarını paylaş; kayıt dosyanı veya bütün günlüğünü herkese açık göndermen gerekmez.
+Yükleme satırında `[StorageHunterAssist] v0.3.0 loaded` görülmesi modun yüklendiğini gösterir. Günlük hiç oluşmuyorsa önce UE4SS kurulumunu kontrol et. Yardım isterken oyun build'ini, UE4SS sürümünü, hangi düğmeye bastığını ve ilgili hata satırlarını paylaş; kayıt dosyanı veya bütün günlüğünü herkese açık göndermen gerekmez.
 
 ## Güncelleme ve kaldırma
 
